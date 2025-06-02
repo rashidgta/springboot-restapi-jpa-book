@@ -5,9 +5,11 @@ import com.springboot.restapi.jpa.book.entities.Book;
 import com.springboot.restapi.jpa.book.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.module.FindException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,45 +19,62 @@ public class BookController {
     @Autowired
     BookService bookService;
 
+
+    @PostMapping("/books")
+    public ResponseEntity<Book> addBook(@RequestBody Book b) {
+        Book book = bookService.addBook(b);
+        if (book == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(book);
+    }
+
+    @PostMapping("/books/saveAll")
+    public ResponseEntity<List<Book>> addAllBooks(@RequestBody List<Book> list) {
+        List<Book> list1 = bookService.addAllBook(list);
+        if (list1.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(list1);
+    }
+
+
     @GetMapping("/books")
     public ResponseEntity<List<Book>> getBooks() {
-        List <Book> list = bookService.getAllBooks();
-        if(list.isEmpty()) {
+        List <Book> list1 = bookService.getAllBooks();
+        if(list1.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.of(Optional.of(list));
+        return ResponseEntity.of(Optional.of(list1));
     }
 
     @GetMapping("/books/{id}")
     public ResponseEntity<Book> getSingleBook(@PathVariable ("id") int id) {
-        Book book = bookService.getBookById(id);
-        if(book == null) {
+        Book book1 = bookService.getBookById(id);
+        if(book1 == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.of(Optional.of(book));
+        return ResponseEntity.of(Optional.of(book1));
     }
 
     @PutMapping("/books/{bookId}")
     public ResponseEntity<Book> updateBooks(@RequestBody Book book, @PathVariable ("bookId") int bookId) {
-        Book b = bookService.updateBookById(book, bookId);
-        if(b == null) {
+        Book book1 = bookService.updateBookById(book, bookId);
+        if(book1 == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.of(Optional.of(b));
-    }
-
-    @PostMapping("/books")
-    public Book addBooks(@RequestBody Book b) {
-        return this.bookService.addBook(b);
+        return ResponseEntity.of(Optional.of(book1));
     }
 
     @DeleteMapping("/books/{bookId}")
-    public ResponseEntity<Book> deleteBooks(@PathVariable ("bookId")  int bookId) {
-        Book b = bookService.deleteBook(bookId);
-        if(b == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<Void> deleteBooks(@PathVariable ("bookId")  int bookId) {
+        try {
+            bookService.deleteBook(bookId);
+            return ResponseEntity.ok().build();
+        } catch (FindException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.of(Optional.of(b));
     }
 
 }
