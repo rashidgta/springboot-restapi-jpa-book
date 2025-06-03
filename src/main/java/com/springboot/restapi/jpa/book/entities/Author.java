@@ -1,6 +1,5 @@
 package com.springboot.restapi.jpa.book.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,15 +7,13 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book {
+public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "book_id")
-    private int id;
+    private int authorId;
 
-    private String title;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Author author;
+    private String firstName;
+    private String lastName;
+    private String language;
 }

@@ -5,7 +5,6 @@ import com.springboot.restapi.jpa.book.entities.Book;
 import com.springboot.restapi.jpa.book.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,6 @@ public class BookController {
 
     @Autowired
     BookService bookService;
-
 
     @PostMapping("/books")
     public ResponseEntity<Book> addBook(@RequestBody Book b) {
@@ -37,7 +35,6 @@ public class BookController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(list1);
     }
-
 
     @GetMapping("/books")
     public ResponseEntity<List<Book>> getBooks() {
@@ -76,7 +73,6 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
 }
 
 
