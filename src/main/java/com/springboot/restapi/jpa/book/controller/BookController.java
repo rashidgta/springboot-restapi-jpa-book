@@ -46,7 +46,7 @@ public class BookController {
     }
 
     @GetMapping("/books/{id}")
-    public ResponseEntity<Book> getSingleBook(@PathVariable ("id") int id) {
+    public ResponseEntity<Book> getSingleBook(@PathVariable int id) {
         Book book1 = bookService.getBookById(id);
         if(book1 == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -55,7 +55,7 @@ public class BookController {
     }
 
     @PutMapping("/books/{bookId}")
-    public ResponseEntity<Book> updateBooks(@RequestBody Book book, @PathVariable ("bookId") int bookId) {
+    public ResponseEntity<Book> updateBooks(@RequestBody Book book, @PathVariable int bookId) {
         Book book1 = bookService.updateBookById(book, bookId);
         if(book1 == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -64,7 +64,7 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{bookId}")
-    public ResponseEntity<Void> deleteBooks(@PathVariable ("bookId")  int bookId) {
+    public ResponseEntity<Void> deleteBooks(@PathVariable  int bookId) {
         try {
             bookService.deleteBook(bookId);
             return ResponseEntity.ok().build();
